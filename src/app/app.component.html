@@ -1,0 +1,25 @@
+<div class="app-container">
+  <!-- Header -->
+  <header class="header" *ngIf="isAuthenticated">
+    <div class="header-content">
+      <h1>{{ title }}</h1>
+      <div class="user-info">
+        <span class="user-email">{{ currentUser?.email }}</span>
+        <button class="btn-logout" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="navigation" *ngIf="isAuthenticated">
+    <ul>
+      <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/users" routerLinkActive="active">Users</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main content area where routed components will be displayed -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

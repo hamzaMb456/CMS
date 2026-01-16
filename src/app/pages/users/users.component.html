@@ -1,0 +1,36 @@
+<!-- Users management page -->
+<div class="users-container">
+  <h2>Users Management</h2>
+  <p>Manage all users in your CMS system.</p>
+
+  <div *ngIf="loading" class="no-users">
+    <p>Loading users...</p>
+  </div>
+
+  <div *ngIf="!loading && errorMessage" class="no-users">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Users table -->
+  <div class="table-container" *ngIf="!loading && !errorMessage && users.length > 0">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Display message if no users -->
+  <div *ngIf="!loading && !errorMessage && users.length === 0" class="no-users">
+    <p>No users found.</p>
+  </div>
+</div>
