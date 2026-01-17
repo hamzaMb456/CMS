@@ -76,33 +76,38 @@ select:focus {
 
 /* Button styles */
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
+  padding: 10px 18px;
+  border-radius: 6px;
   font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
+  background-color: #e9ecef;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  padding: 10px 18px;
+  border-radius: 6px;
   font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
+  background-color: #dee2e6;
+  border-color: #adb5bd;
 }
 
 /* Categories Grid */
@@ -204,12 +209,16 @@ select:focus {
 }
 
 .btn-action {
-  padding: 6px 10px;
-  font-size: 0.8rem;
+  padding: 8px 14px;
+  font-size: 0.75rem;
   border: none;
-  border-radius: 3px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-edit {
@@ -219,6 +228,8 @@ select:focus {
 
 .btn-edit:hover {
   background-color: #138496;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
 }
 
 .btn-delete {
@@ -228,6 +239,8 @@ select:focus {
 
 .btn-delete:hover {
   background-color: #c82333;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
 }
 
 .category-description {
