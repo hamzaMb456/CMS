@@ -116,14 +116,34 @@ select:focus {
 .category-card {
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 20px;
+  overflow: hidden;
   background-color: #f9f9f9;
   transition: box-shadow 0.3s, background-color 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .category-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+}
+
+.category-image-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: #e0e0e0;
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-image {
+  transform: scale(1.05);
 }
 
 .category-header-section {
@@ -132,6 +152,10 @@ select:focus {
   align-items: flex-start;
   margin-bottom: 10px;
   gap: 10px;
+  padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .category-title-section {
@@ -200,14 +224,14 @@ select:focus {
 
 .category-description {
   color: #666;
-  margin: 10px 0;
+  margin: 0 0 10px 0;
   font-size: 0.95rem;
 }
 
 .category-stats {
   display: flex;
   gap: 15px;
-  margin: 15px 0;
+  margin: 15px 0 10px 0;
   padding: 10px 0;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -236,7 +260,7 @@ select:focus {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin: 12px 0 10px 0;
+  margin: 10px 0;
   padding: 8px 0;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
