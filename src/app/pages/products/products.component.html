@@ -1,0 +1,254 @@
+<!-- Products management page -->
+<div class="products-container">
+  <div class="products-header">
+    <h2>Products Management</h2>
+    <button class="btn-primary" (click)="toggleAddForm()">
+      {{ showAddForm ? 'Cancel' : '+ Add New Product' }}
+    </button>
+  </div>
+
+  <p class="products-description">Manage all products in your e-commerce store.</p>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-message">
+    <p>Loading products...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="!loading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Add Product Form -->
+  <div class="add-product-form" *ngIf="showAddForm && !loading">
+    <h3>Add New Product</h3>
+    <div class="form-group">
+      <label for="product-name">Product Name *</label>
+      <input
+        type="text"
+        id="product-name"
+        [(ngModel)]="newProductName"
+        placeholder="Enter product name"
+        class="form-input"
+      />
+    </div>
+    <div class="form-group">
+      <label for="product-description">Description</label>
+      <textarea
+        id="product-description"
+        [(ngModel)]="newProductDescription"
+        placeholder="Enter product description"
+        class="form-textarea"
+        rows="3"
+      ></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="product-category">Category *</label>
+        <select
+          id="product-category"
+          [(ngModel)]="newProductCategoryId"
+          class="form-input"
+        >
+          <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="product-price">Price (USD) *</label>
+        <input
+          type="number"
+          id="product-price"
+          [(ngModel)]="newProductPrice"
+          placeholder="0.00"
+          class="form-input"
+          step="0.01"
+          min="0"
+        />
+      </div>
+      <div class="form-group">
+        <label for="product-stock">Stock Quantity</label>
+        <input
+          type="number"
+          id="product-stock"
+          [(ngModel)]="newProductStock"
+          placeholder="0"
+          class="form-input"
+          min="0"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="product-image">Image URL</label>
+      <input
+        type="url"
+        id="product-image"
+        [(ngModel)]="newProductImageUrl"
+        placeholder="Enter image URL"
+        class="form-input"
+      />
+    </div>
+    <div class="form-group">
+      <label for="product-status">Status</label>
+      <select
+        id="product-status"
+        [(ngModel)]="newProductStatus"
+        class="form-input"
+      >
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="discontinued">Discontinued</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" (click)="addProduct()">Create Product</button>
+      <button class="btn-secondary" (click)="toggleAddForm()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Products Table -->
+  <div class="table-container" *ngIf="!loading && !errorMessage && products.length > 0">
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td class="product-image-cell">
+            <img
+              [src]="product.image_url"
+              [alt]="product.name"
+              class="product-thumbnail"
+              onerror="this.src='https://images.unsplash.com/photo-1557821552-17105176677c?w=100&h=100&fit=crop'"
+            />
+          </td>
+          <td>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-description">{{ product.description }}</div>
+          </td>
+          <td>{{ product.categoryName }}</td>
+          <td class="product-price">{{ formatPrice(product.price) }}</td>
+          <td>
+            <div class="stock-badge" [ngClass]="'stock-' + getStockStatus(product.stock).replace(' ', '-').toLowerCase()">
+              {{ product.stock }} {{ getStockStatus(product.stock) }}
+            </div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="'status-' + product.status">
+              {{ product.status }}
+            </span>
+          </td>
+          <td class="product-actions">
+            <button class="btn-action btn-edit" (click)="openEditForm(product)" title="Edit product">Edit</button>
+            <button class="btn-action btn-delete" (click)="deleteProduct(product.id)" title="Delete product">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty state message -->
+  <div class="no-products" *ngIf="!loading && !errorMessage && products.length === 0">
+    <p>No products yet. Create your first product to get started.</p>
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div class="modal-overlay" *ngIf="showEditForm" (click)="closeEditForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Edit Product</h3>
+        <button class="modal-close" (click)="closeEditForm()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="edit-product-name">Product Name *</label>
+          <input
+            type="text"
+            id="edit-product-name"
+            [(ngModel)]="editProductName"
+            placeholder="Enter product name"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label for="edit-product-description">Description</label>
+          <textarea
+            id="edit-product-description"
+            [(ngModel)]="editProductDescription"
+            placeholder="Enter product description"
+            class="form-textarea"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-product-category">Category *</label>
+            <select
+              id="edit-product-category"
+              [(ngModel)]="editProductCategoryId"
+              class="form-input"
+            >
+              <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-product-price">Price (USD) *</label>
+            <input
+              type="number"
+              id="edit-product-price"
+              [(ngModel)]="editProductPrice"
+              placeholder="0.00"
+              class="form-input"
+              step="0.01"
+              min="0"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-product-stock">Stock Quantity</label>
+            <input
+              type="number"
+              id="edit-product-stock"
+              [(ngModel)]="editProductStock"
+              placeholder="0"
+              class="form-input"
+              min="0"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-product-image">Image URL</label>
+          <input
+            type="url"
+            id="edit-product-image"
+            [(ngModel)]="editProductImageUrl"
+            placeholder="Enter image URL"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label for="edit-product-status">Status</label>
+          <select
+            id="edit-product-status"
+            [(ngModel)]="editProductStatus"
+            class="form-input"
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="discontinued">Discontinued</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" (click)="updateProduct()">Save Changes</button>
+        <button class="btn-secondary" (click)="closeEditForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
