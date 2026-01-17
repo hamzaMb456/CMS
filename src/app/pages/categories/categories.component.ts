@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
-
-interface Category {
-  id: number;
-  name: string;
-  description: string;
-  productCount: number;
-}
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-categories',
@@ -13,49 +9,42 @@ interface Category {
   styleUrls: ['./categories.component.css'],
   standalone: false
 })
-export class CategoriesComponent {
-  categories: Category[] = [
-    {
-      id: 1,
-      name: 'Electronics',
-      description: 'Electronic devices and gadgets',
-      productCount: 45
-    },
-    {
-      id: 2,
-      name: 'Clothing',
-      description: 'Apparel and fashion items',
-      productCount: 120
-    },
-    {
-      id: 3,
-      name: 'Home & Garden',
-      description: 'Home and garden products',
-      productCount: 78
-    },
-    {
-      id: 4,
-      name: 'Sports & Outdoors',
-      description: 'Sports and outdoor equipment',
-      productCount: 56
-    },
-    {
-      id: 5,
-      name: 'Books & Media',
-      description: 'Books, movies, and media items',
-      productCount: 32
-    },
-    {
-      id: 6,
-      name: 'Health & Beauty',
-      description: 'Health and beauty products',
-      productCount: 89
-    }
-  ];
+export class CategoriesComponent implements OnInit, OnDestroy {
+  categories: Category[] = [];
+  loading: boolean = true;
+  errorMessage: string = '';
+  private categoriesSubscription?: Subscription;
 
   newCategoryName: string = '';
   newCategoryDescription: string = '';
+  newCategoryStatus: 'active' | 'inactive' = 'active';
   showAddForm: boolean = false;
+
+  constructor(private categoryService: CategoryService) {}
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  ngOnDestroy(): void {
+    this.categoriesSubscription?.unsubscribe();
+  }
+
+  loadCategories(): void {
+    this.loading = true;
+    this.errorMessage = '';
+    this.categoriesSubscription = this.categoryService.categories$.subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load categories:', err);
+        this.errorMessage = 'Failed to load categories.';
+        this.loading = false;
+      }
+    });
+  }
 
   toggleAddForm(): void {
     this.showAddForm = !this.showAddForm;
@@ -66,26 +55,65 @@ export class CategoriesComponent {
 
   addCategory(): void {
     if (this.newCategoryName.trim()) {
-      const newCategory: Category = {
-        id: Math.max(...this.categories.map(c => c.id)) + 1,
+      const newCategory: Omit<Category, 'id' | 'created_at' | 'last_modified'> = {
         name: this.newCategoryName,
         description: this.newCategoryDescription,
-        productCount: 0
+        productCount: 0,
+        status: this.newCategoryStatus
       };
-      this.categories.push(newCategory);
-      this.resetForm();
-      this.showAddForm = false;
+
+      this.categoryService.createCategory(newCategory).subscribe({
+        next: (category) => {
+          this.categoryService.addCategoryToState(category);
+          this.resetForm();
+          this.showAddForm = false;
+        },
+        error: (err) => {
+          console.error('Failed to create category:', err);
+          // For frontend-only, add to state anyway
+          const createdCategory: Category = {
+            id: Math.max(...this.categories.map(c => c.id), 0) + 1,
+            ...newCategory,
+            created_at: new Date(),
+            last_modified: new Date()
+          };
+          this.categoryService.addCategoryToState(createdCategory);
+          this.resetForm();
+          this.showAddForm = false;
+        }
+      });
     }
   }
 
   deleteCategory(id: number): void {
     if (confirm('Are you sure you want to delete this category?')) {
-      this.categories = this.categories.filter(c => c.id !== id);
+      this.categoryService.deleteCategory(id).subscribe({
+        next: () => {
+          this.categoryService.removeCategoryFromState(id);
+        },
+        error: (err) => {
+          console.error('Failed to delete category:', err);
+          // For frontend-only, remove from state anyway
+          this.categoryService.removeCategoryFromState(id);
+        }
+      });
     }
+  }
+
+  formatDate(date: Date | string): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return dateObj.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
   resetForm(): void {
     this.newCategoryName = '';
     this.newCategoryDescription = '';
+    this.newCategoryStatus = 'active';
   }
 }
