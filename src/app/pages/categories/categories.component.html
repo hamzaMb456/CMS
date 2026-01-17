@@ -72,6 +72,14 @@
   <!-- Categories Grid -->
   <div class="categories-grid" *ngIf="!loading">
     <div class="category-card" *ngFor="let category of categories">
+      <div class="category-image-wrapper">
+        <img
+          [src]="category.image_url"
+          [alt]="category.name"
+          class="category-image"
+          onerror="this.src='https://images.unsplash.com/photo-1557821552-17105176677c?w=500&h=300&fit=crop'"
+        />
+      </div>
       <div class="category-header-section">
         <div class="category-title-section">
           <h3 class="category-name">{{ category.name }}</h3>
