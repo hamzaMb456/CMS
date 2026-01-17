@@ -21,6 +21,13 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   newCategoryStatus: 'active' | 'inactive' = 'active';
   showAddForm: boolean = false;
 
+  editingCategoryId: number | null = null;
+  editCategoryName: string = '';
+  editCategoryDescription: string = '';
+  editCategoryImageUrl: string = '';
+  editCategoryStatus: 'active' | 'inactive' = 'active';
+  showEditForm: boolean = false;
+
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
@@ -118,5 +125,51 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.newCategoryDescription = '';
     this.newCategoryImageUrl = '';
     this.newCategoryStatus = 'active';
+  }
+
+  openEditForm(category: Category): void {
+    this.editingCategoryId = category.id;
+    this.editCategoryName = category.name;
+    this.editCategoryDescription = category.description;
+    this.editCategoryImageUrl = category.image_url;
+    this.editCategoryStatus = category.status || 'active';
+    this.showEditForm = true;
+  }
+
+  closeEditForm(): void {
+    this.showEditForm = false;
+    this.editingCategoryId = null;
+    this.resetEditForm();
+  }
+
+  updateCategory(): void {
+    if (this.editingCategoryId && this.editCategoryName.trim()) {
+      const updatedCategory: Partial<Category> = {
+        name: this.editCategoryName,
+        description: this.editCategoryDescription,
+        image_url: this.editCategoryImageUrl,
+        status: this.editCategoryStatus
+      };
+
+      this.categoryService.updateCategory(this.editingCategoryId, updatedCategory).subscribe({
+        next: (category) => {
+          this.categoryService.updateCategoryInState(this.editingCategoryId!, updatedCategory);
+          this.closeEditForm();
+        },
+        error: (err) => {
+          console.error('Failed to update category:', err);
+          // For frontend-only, update state anyway
+          this.categoryService.updateCategoryInState(this.editingCategoryId!, updatedCategory);
+          this.closeEditForm();
+        }
+      });
+    }
+  }
+
+  resetEditForm(): void {
+    this.editCategoryName = '';
+    this.editCategoryDescription = '';
+    this.editCategoryImageUrl = '';
+    this.editCategoryStatus = 'active';
   }
 }
