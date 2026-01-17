@@ -1,0 +1,117 @@
+<!-- Product Detail Page -->
+<div class="product-detail-container">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-message">
+    <p>Loading product details...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="!loading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+    <button class="btn-primary" (click)="goBack()">Back to Products</button>
+  </div>
+
+  <!-- Product Detail Content -->
+  <div *ngIf="!loading && !errorMessage && product" class="detail-content">
+    <!-- Header Section -->
+    <div class="detail-header">
+      <button class="btn-back" (click)="goBack()">← Back to Products</button>
+      <h1 class="detail-title">{{ product.name }}</h1>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="detail-grid">
+      <!-- Left Column - Image -->
+      <div class="detail-image-section">
+        <div class="image-wrapper">
+          <img
+            [src]="product.image_url"
+            [alt]="product.name"
+            class="detail-image"
+            onerror="this.src='https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop'"
+          />
+        </div>
+        <div class="image-caption">
+          Product Image
+        </div>
+      </div>
+
+      <!-- Right Column - Details -->
+      <div class="detail-info-section">
+        <!-- Price Card -->
+        <div class="info-card price-card">
+          <div class="card-title">Price</div>
+          <span class="price-value">{{ formatPrice(product.price) }}</span>
+        </div>
+
+        <!-- Status & Stock Card -->
+        <div class="info-card status-stock-card">
+          <div class="card-section">
+            <div class="card-title">Status</div>
+            <span class="status-badge" [ngClass]="'status-' + product.status">
+              {{ product.status }}
+            </span>
+          </div>
+          <div class="card-section">
+            <div class="card-title">Stock Level</div>
+            <div class="stock-display">
+              <span class="stock-number">{{ product.stock }}</span>
+              <span class="stock-status-badge" [ngClass]="getStockStatusClass(product.stock)">
+                {{ getStockStatus(product.stock) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description Card -->
+        <div class="info-card">
+          <div class="card-title">Description</div>
+          <p class="description-text">{{ product.description }}</p>
+        </div>
+
+        <!-- Category Card -->
+        <div class="info-card category-card">
+          <div class="card-title">Category</div>
+          <div class="category-info">
+            <span class="category-name">📁 {{ product.categoryName }}</span>
+            <button class="btn-small" (click)="goToCategory()">View Category →</button>
+          </div>
+        </div>
+
+        <!-- Audit Information Card -->
+        <div class="info-card audit-card">
+          <div class="card-title">Audit Information</div>
+          <div class="audit-info">
+            <div class="audit-row">
+              <span class="audit-label">Created:</span>
+              <span class="audit-value">{{ formatDate(product.created_at) }}</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-label">Last Modified:</span>
+              <span class="audit-value">{{ formatDate(product.last_modified) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product ID Card -->
+        <div class="info-card">
+          <div class="card-title">Product ID</div>
+          <code class="product-id">{{ product.id }}</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Actions -->
+    <div class="actions-section">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <button class="btn-primary" (click)="goToCategory()">
+          📁 View Category: {{ product.categoryName }}
+        </button>
+        <button class="btn-secondary" (click)="goBack()">
+          ← Back to Products
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
