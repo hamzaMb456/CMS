@@ -111,123 +111,258 @@ select:focus {
   margin-top: 15px;
 }
 
-/* Products Table */
-.table-container {
+/* Products Grid */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
   margin-bottom: 30px;
-  overflow-x: auto;
 }
 
-.products-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+.product-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
   overflow: hidden;
+  background-color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
-.products-table th,
-.products-table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+.product-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  border-color: #007bff;
 }
 
-.products-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  color: #333;
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.products-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.products-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-.product-image-cell {
-  width: 80px;
-}
-
-.product-thumbnail {
-  width: 70px;
-  height: 70px;
+.product-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 1;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.product-status-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-status-badge.status-active {
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.product-status-badge.status-inactive {
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.product-status-badge.status-discontinued {
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.product-content {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  flex: 1;
+}
+
+.product-header {
+  margin-bottom: 8px;
 }
 
 .product-name {
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 4px;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .product-description {
+  color: #666;
   font-size: 0.85rem;
-  color: #999;
-  white-space: nowrap;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.product-price {
-  font-weight: bold;
-  color: #007bff;
-  font-size: 1.1rem;
-}
-
-.stock-badge {
+.product-category-tag {
   display: inline-block;
   padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 12px;
   font-weight: 500;
 }
 
+.product-main-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 12px;
+}
+
+.product-price-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-price-label {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.product-price-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.product-stock-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.stock-label {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .stock-in-stock {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
 }
 
 .stock-low-stock {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffe082;
 }
 
 .stock-out-of-stock {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
 }
 
-.status-badge {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 12px;
+.stock-status-text {
   font-size: 0.75rem;
-  font-weight: bold;
-  text-transform: uppercase;
+  color: #999;
+  font-weight: 500;
 }
 
-.status-badge.status-active {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.status-badge.status-inactive {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.status-badge.status-discontinued {
-  background-color: #e2e3e5;
-  color: #383d41;
-}
-
-.product-actions {
-  display: flex;
+.product-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
+  font-size: 0.8rem;
+}
+
+.product-date-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date-label {
+  color: #999;
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.date-value {
+  color: #555;
+  font-size: 0.75rem;
+  font-family: 'Courier New', monospace;
 }
 
 .btn-action {
