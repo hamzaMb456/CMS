@@ -366,12 +366,16 @@ select:focus {
 }
 
 .btn-action {
-  padding: 6px 10px;
-  font-size: 0.8rem;
+  padding: 8px 14px;
+  font-size: 0.75rem;
   border: none;
-  border-radius: 3px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-edit {
@@ -381,6 +385,7 @@ select:focus {
 
 .btn-edit:hover {
   background-color: #138496;
+  transform: scale(1.05);
 }
 
 .btn-delete {
@@ -390,6 +395,7 @@ select:focus {
 
 .btn-delete:hover {
   background-color: #c82333;
+  transform: scale(1.05);
 }
 
 .no-products {
@@ -503,25 +509,34 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
-  .products-table {
-    font-size: 0.9rem;
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
   }
 
-  .products-table th,
-  .products-table td {
-    padding: 10px;
+  .product-image-wrapper {
+    height: 160px;
   }
 
-  .product-thumbnail {
-    width: 50px;
-    height: 50px;
+  .product-main-info {
+    grid-template-columns: 1fr;
   }
 
-  .product-description {
-    display: none;
+  .product-dates {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
   }
 
-  .product-actions {
-    flex-direction: column;
+  .product-name {
+    font-size: 1rem;
+  }
+
+  .product-price-value {
+    font-size: 1.2rem;
   }
 }
