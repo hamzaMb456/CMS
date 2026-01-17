@@ -1,0 +1,102 @@
+<!-- Category Detail Page -->
+<div class="category-detail-container">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-message">
+    <p>Loading category details...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="!loading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+    <button class="btn-primary" (click)="goBack()">Back to Categories</button>
+  </div>
+
+  <!-- Category Detail Content -->
+  <div *ngIf="!loading && !errorMessage && category" class="detail-content">
+    <!-- Header Section -->
+    <div class="detail-header">
+      <button class="btn-back" (click)="goBack()">← Back to Categories</button>
+      <h1 class="detail-title">{{ category.name }}</h1>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="detail-grid">
+      <!-- Left Column - Image -->
+      <div class="detail-image-section">
+        <div class="image-wrapper">
+          <img
+            [src]="category.image_url"
+            [alt]="category.name"
+            class="detail-image"
+            onerror="this.src='https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop'"
+          />
+        </div>
+        <div class="image-caption">
+          Category Image
+        </div>
+      </div>
+
+      <!-- Right Column - Details -->
+      <div class="detail-info-section">
+        <!-- Status Card -->
+        <div class="info-card status-card">
+          <div class="card-title">Status</div>
+          <span class="status-badge" [ngClass]="'status-' + category.status">
+            {{ category.status }}
+          </span>
+        </div>
+
+        <!-- Description Card -->
+        <div class="info-card">
+          <div class="card-title">Description</div>
+          <p class="description-text">{{ category.description }}</p>
+        </div>
+
+        <!-- Statistics Card -->
+        <div class="info-card stats-card">
+          <div class="card-title">Statistics</div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span class="stat-label">Total Products</span>
+              <span class="stat-number">{{ category.productCount }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Information Card -->
+        <div class="info-card audit-card">
+          <div class="card-title">Audit Information</div>
+          <div class="audit-info">
+            <div class="audit-row">
+              <span class="audit-label">Created:</span>
+              <span class="audit-value">{{ formatDate(category.created_at) }}</span>
+            </div>
+            <div class="audit-row">
+              <span class="audit-label">Last Modified:</span>
+              <span class="audit-value">{{ formatDate(category.last_modified) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category ID Card -->
+        <div class="info-card">
+          <div class="card-title">Category ID</div>
+          <code class="category-id">{{ category.id }}</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Actions -->
+    <div class="actions-section">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <button class="btn-primary">
+          🛍️ View Products in Category ({{ category.productCount }})
+        </button>
+        <button class="btn-secondary" (click)="goBack()">
+          ← Back to Categories
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
