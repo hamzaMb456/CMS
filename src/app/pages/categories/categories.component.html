@@ -1,0 +1,66 @@
+<!-- Categories management page -->
+<div class="categories-container">
+  <div class="categories-header">
+    <h2>Product Categories</h2>
+    <button class="btn-primary" (click)="toggleAddForm()">
+      {{ showAddForm ? 'Cancel' : '+ Add New Category' }}
+    </button>
+  </div>
+
+  <p class="categories-description">Manage all product categories for your e-commerce store.</p>
+
+  <!-- Add Category Form -->
+  <div class="add-category-form" *ngIf="showAddForm">
+    <h3>Add New Category</h3>
+    <div class="form-group">
+      <label for="category-name">Category Name</label>
+      <input
+        type="text"
+        id="category-name"
+        [(ngModel)]="newCategoryName"
+        placeholder="Enter category name"
+        class="form-input"
+      />
+    </div>
+    <div class="form-group">
+      <label for="category-description">Description</label>
+      <textarea
+        id="category-description"
+        [(ngModel)]="newCategoryDescription"
+        placeholder="Enter category description"
+        class="form-textarea"
+        rows="3"
+      ></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" (click)="addCategory()">Create Category</button>
+      <button class="btn-secondary" (click)="toggleAddForm()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Categories Grid -->
+  <div class="categories-grid">
+    <div class="category-card" *ngFor="let category of categories">
+      <div class="category-header-section">
+        <h3 class="category-name">{{ category.name }}</h3>
+        <div class="category-actions">
+          <button class="btn-action btn-edit" title="Edit category">Edit</button>
+          <button class="btn-action btn-delete" (click)="deleteCategory(category.id)" title="Delete category">Delete</button>
+        </div>
+      </div>
+      <p class="category-description">{{ category.description }}</p>
+      <div class="category-stats">
+        <div class="stat-item">
+          <span class="stat-label">Products</span>
+          <span class="stat-value">{{ category.productCount }}</span>
+        </div>
+      </div>
+      <a href="#" class="category-link">View Products →</a>
+    </div>
+  </div>
+
+  <!-- Empty state message -->
+  <div class="no-categories" *ngIf="categories.length === 0">
+    <p>No categories yet. Create your first category to get started.</p>
+  </div>
+</div>
