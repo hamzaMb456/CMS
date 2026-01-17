@@ -17,6 +17,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   newCategoryName: string = '';
   newCategoryDescription: string = '';
+  newCategoryImageUrl: string = '';
   newCategoryStatus: 'active' | 'inactive' = 'active';
   showAddForm: boolean = false;
 
@@ -58,6 +59,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       const newCategory: Omit<Category, 'id' | 'created_at' | 'last_modified'> = {
         name: this.newCategoryName,
         description: this.newCategoryDescription,
+        image_url: this.newCategoryImageUrl,
         productCount: 0,
         status: this.newCategoryStatus
       };
@@ -114,6 +116,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   resetForm(): void {
     this.newCategoryName = '';
     this.newCategoryDescription = '';
+    this.newCategoryImageUrl = '';
     this.newCategoryStatus = 'active';
   }
 }
