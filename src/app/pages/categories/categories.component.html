@@ -9,11 +9,21 @@
 
   <p class="categories-description">Manage all product categories for your e-commerce store.</p>
 
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-message">
+    <p>Loading categories...</p>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="!loading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
   <!-- Add Category Form -->
-  <div class="add-category-form" *ngIf="showAddForm">
+  <div class="add-category-form" *ngIf="showAddForm && !loading">
     <h3>Add New Category</h3>
     <div class="form-group">
-      <label for="category-name">Category Name</label>
+      <label for="category-name">Category Name *</label>
       <input
         type="text"
         id="category-name"
@@ -32,6 +42,17 @@
         rows="3"
       ></textarea>
     </div>
+    <div class="form-group">
+      <label for="category-status">Status</label>
+      <select
+        id="category-status"
+        [(ngModel)]="newCategoryStatus"
+        class="form-input"
+      >
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
     <div class="form-actions">
       <button class="btn-primary" (click)="addCategory()">Create Category</button>
       <button class="btn-secondary" (click)="toggleAddForm()">Cancel</button>
@@ -39,10 +60,15 @@
   </div>
 
   <!-- Categories Grid -->
-  <div class="categories-grid">
+  <div class="categories-grid" *ngIf="!loading">
     <div class="category-card" *ngFor="let category of categories">
       <div class="category-header-section">
-        <h3 class="category-name">{{ category.name }}</h3>
+        <div class="category-title-section">
+          <h3 class="category-name">{{ category.name }}</h3>
+          <span class="category-status" [ngClass]="'status-' + category.status">
+            {{ category.status }}
+          </span>
+        </div>
         <div class="category-actions">
           <button class="btn-action btn-edit" title="Edit category">Edit</button>
           <button class="btn-action btn-delete" (click)="deleteCategory(category.id)" title="Delete category">Delete</button>
@@ -55,12 +81,22 @@
           <span class="stat-value">{{ category.productCount }}</span>
         </div>
       </div>
+      <div class="category-dates">
+        <div class="date-info">
+          <span class="date-label">Created:</span>
+          <span class="date-value">{{ formatDate(category.created_at) }}</span>
+        </div>
+        <div class="date-info">
+          <span class="date-label">Modified:</span>
+          <span class="date-value">{{ formatDate(category.last_modified) }}</span>
+        </div>
+      </div>
       <a href="#" class="category-link">View Products →</a>
     </div>
   </div>
 
   <!-- Empty state message -->
-  <div class="no-categories" *ngIf="categories.length === 0">
+  <div class="no-categories" *ngIf="!loading && categories.length === 0">
     <p>No categories yet. Create your first category to get started.</p>
   </div>
 </div>
