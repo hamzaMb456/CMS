@@ -230,11 +230,9 @@ select:focus {
   display: flex;
   gap: 15px;
   margin: 15px 0 10px 0;
-  padding: 10px 0;
+  padding: 10px 15px;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  padding-left: 0;
-  padding-right: 0;
 }
 
 .stat-item {
