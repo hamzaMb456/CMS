@@ -232,6 +232,8 @@ select:focus {
   padding: 10px 0;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .stat-item {
@@ -284,6 +286,7 @@ select:focus {
   font-weight: 500;
   display: inline-block;
   margin-top: 10px;
+  padding: 0 15px 15px 15px;
 }
 
 .category-link:hover {
