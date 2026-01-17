@@ -10,6 +10,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
+import { ProductsComponent } from './pages/products/products.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AuthInterceptor } from './services/auth.interceptor';
     UsersComponent,
     LoginComponent,
     RegisterComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserModule,
